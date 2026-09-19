@@ -17,19 +17,34 @@ space.
 - [`Scenes/`](Scenes) — the main scene (`main.tscn`/`main.gd`), the orbiting
   camera controller, and the `Graph`/`NodeVisual`/`EdgeVisual` data/visual
   classes.
-- [`Resources/`](Resources) — styles and themes for the UI.
-- [`Assets/`](Assets) — art and media assets.
 - [`addons/`](addons) — third-party editor plugins (the Godot Git plugin).
+- [`tools/`](tools) — the development loop below.
 
 ## Requirements
 
-- [Godot Engine](https://godotengine.org/) 4.7+.
+- [Godot Engine](https://godotengine.org/) at the version pinned in
+  [`.godot-version`](.godot-version). The loop below refuses any other.
 
 ## Running
 
 Open `project.godot` in the Godot editor and run the project (F5), or run it
-headless from the command line:
+from the command line:
 
 ```sh
-godot --path . 
+godot --path .
 ```
+
+## Development loop
+
+[`tools/dev.ps1`](tools/dev.ps1) is the local loop, on the pinned engine and
+nothing else:
+
+```powershell
+tools/dev.ps1 check            # import, the engine's parser on every script, a headless smoke run
+tools/dev.ps1 play -Frames 60  # run the main scene windowed, quit after 60 frames
+tools/dev.ps1 editor           # open the editor, refusing if one already has the project
+```
+
+`check` reads the smoke run's stderr for `SCRIPT ERROR:` lines because the
+engine exits 0 on a runtime script error. Every gate in it has been broken on
+purpose and seen to go red before it was trusted.
