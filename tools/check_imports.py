@@ -17,19 +17,12 @@ none) is reported as such and not counted as missing.
 from __future__ import annotations
 
 import re
-import subprocess
-import sys
 from pathlib import Path
+
+from repo import ROOT, fail, tracked, verdict
 
 DEST_FILES = re.compile(r'^dest_files=\[(.*)\]\s*$', re.MULTILINE)
 QUOTED = re.compile(r'"([^"]*)"')
-
-
-def tracked_sidecars() -> list[Path]:
-    out = subprocess.run(
-        ["git", "ls-files", "*.import"], capture_output=True, text=True, check=True
-    ).stdout
-    return [Path(line) for line in out.splitlines() if line.strip()]
 
 
 def res_to_path(res: str) -> Path:
@@ -37,40 +30,37 @@ def res_to_path(res: str) -> Path:
 
 
 def main() -> int:
-    sidecars = tracked_sidecars()
+    sidecars = tracked("*.import")
     if not sidecars:
-        print("FAIL: git ls-files found no *.import files; is this the project root?", file=sys.stderr)
+        fail("git ls-files found no *.import files; is this the project root?")
         return 1
 
     missing: list[tuple[Path, Path]] = []
     without_dest = 0
     checked = 0
     for sidecar in sidecars:
-        if not sidecar.is_file():
+        if not (ROOT / sidecar).is_file():
             # Tracked and absent: a deletion nobody staged. Count it, do not crash.
             missing.append((sidecar, sidecar))
             continue
-        text = sidecar.read_text(encoding="utf-8")
+        text = (ROOT / sidecar).read_text(encoding="utf-8")
         m = DEST_FILES.search(text)
         if not m:
             without_dest += 1
             continue
         for dest in QUOTED.findall(m.group(1)):
             checked += 1
-            if not res_to_path(dest).is_file():
+            if not (ROOT / res_to_path(dest)).is_file():
                 missing.append((sidecar, res_to_path(dest)))
 
     for sidecar, dest in missing:
-        print(f"FAIL: {sidecar} says it imports to {dest}, which does not exist.", file=sys.stderr)
+        fail(f"{sidecar} says it imports to {dest}, which does not exist.")
     if missing:
-        print(f"\n{len(missing)} imported file(s) missing of {checked} declared. "
-              "Run the import again and read its errors: one importer failing "
-              "aborts the batch.", file=sys.stderr)
-        return 1
-
-    print(f"OK: {checked} imported file(s) present for {len(sidecars)} sidecars "
-          f"({without_dest} declare no dest_files).")
-    return 0
+        fail(f"{len(missing)} imported file(s) missing of {checked} declared. "
+             "Run the import again and read its errors: one importer failing aborts the batch.")
+    return verdict(len(missing),
+                   f"{checked} imported file(s) present for {len(sidecars)} sidecars "
+                   f"({without_dest} declare no dest_files).")
 
 
 if __name__ == "__main__":

@@ -141,3 +141,79 @@ which behaviour is wanted.
    the checks that handbook names.
 2. First loop iteration with a human present: pick one item from "read in the
    code", change it, `tools/dev.ps1 check`, `tools/dev.ps1 play`, commit.
+
+---
+
+## Session 3: the project becomes rad-godot
+
+Stamped 2026-09-19. Tools: written with an AI coding assistant, reviewed and
+committed by a human.
+
+### What changed, and why
+
+The human named the project **rad-godot**: the Godot implementation of rad's
+interaction contract, sibling to `rad-android`, whose purpose is a portable rad
+menu (an addon) with the existing 3D graph scene as the host that demonstrates
+node and graph manipulation through intents. The name collision noted in
+session 2 is resolved by that decision rather than by a new remote for `moe`.
+
+Established before writing anything, from the repositories rather than from
+memory:
+
+- The org's family record says a radial menu is substrate and belongs to no
+  roster family. "The rad family" here is the set of implementations of one
+  contract, and no roster family field is claimed.
+- `rad-android`'s shape, read from the host: a pure core with the reference's
+  names kept verbatim, a renderer, a demo host, a byte-exact copy of
+  `conformance/vectors.json` locked to a rad commit by hash, and two DRAFT
+  records (scope, architecture) with a milestone ladder. This repository
+  mirrors that shape.
+- rad's platform-plans record names this case as an expected revision
+  trigger: a host on a platform it did not order.
+
+In the tree at this session's commit:
+
+- `project.godot` names the project `rad-godot`; the loop's editor guard
+  matches the new window title.
+- `conformance/vectors.json` is rad's file at commit `2c10fd1` on
+  `origin/evolve/consolidate-rad`, byte-identical (same git blob);
+  `conformance/vectors.lock` holds the full ref and the SHA-256;
+  `tools/check_vector_pin.py` verifies it on every `check`. Seen red on one
+  flipped byte in the file and on one edited digit in the lock.
+- `tools/repo.py` is what the checks share (tracked files, hashing, the
+  `OK:`/`FAIL:` grammar with the exit status as verdict); `check_imports.py`
+  uses it now and later checks will.
+- `docs/DRAFT-rad-godot-adoption-and-scope.md` and
+  `docs/DRAFT-rad-godot-architecture.md`: the plan as records, drafted for a
+  human to ratify. The scope record carries the ladder v0.0.0 → v0.1.0, the
+  upstream triggers this repository knowingly trips, the open questions, and
+  the one product change the human confirms: number-key typing is retired
+  when the menu arrives, because digits are the menu's cell addresses and the
+  contract forbids literal colours in intents.
+- `README.md` rewritten for rad-godot. It describes the host as it stands
+  today; the menu is not in the tree yet.
+- The directory is renamed from `moe` to `rad-godot` after the commit; nothing
+  in the tree depends on the path.
+
+### Queue
+
+- **B** — port the core: `addons/rad/core/*.gd` line for line from the
+  reference (rad `index.html`, the block between the CORE banner and the
+  generated vectors block, at the pinned commit), gdUnit4 vendored as in
+  titanharvest, `tests/test_conformance.gd` replaying every vector,
+  `tools/check_core_boundary.py`, `tools/dev.ps1 test`. Mutations to see red
+  before believing green: `cancelScale` perturbed, `PLACEMENT` reordered, an
+  input API reference in `core/`, one byte in the vector file. Claim: v0.0.1.
+- **C** — session, renderer, input adapter (architecture record §4–§6).
+- **D** — the host through a graph store and a resolver (§7).
+- **E** — human: name confirmed, remote created, visibility chosen; then
+  adoption per the org handbook or the lighter shape; a roster entry; the
+  upstream proposals to rad.
+
+### What to distrust in this page
+
+- The two records are drafts written by the session that wrote the code they
+  describe. Sections marked "from v0.0.1" describe tooling not yet in the tree.
+- `vectors.lock` pins a commit on a rad branch that has no upstream tracking
+  and may be merged or rebased; the hash is what holds, the ref is where to
+  look.

@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  The local loop for moe, on the pinned engine and nothing else.
+  The local loop for rad-godot, on the pinned engine and nothing else.
 
 .DESCRIPTION
   tools/dev.ps1 check          headless import, the engine's own parser on every
@@ -116,6 +116,10 @@ switch ($Mode) {
         python tools/check_imports.py
         if ($LASTEXITCODE -ne 0) { throw "the import left declared artefacts missing" }
 
+        Write-Host '== vector pin' -ForegroundColor Cyan
+        python tools/check_vector_pin.py
+        if ($LASTEXITCODE -ne 0) { throw "conformance/vectors.json is not the copy the lock pins" }
+
         Write-Host '== check-only, every tracked script outside addons/' -ForegroundColor Cyan
         $scripts = git ls-files '*.gd' | Where-Object { $_ -notlike 'addons/*' }
         if (-not $scripts) { throw 'git ls-files found no scripts; is this the repository root?' }
@@ -156,7 +160,7 @@ switch ($Mode) {
                 break
             }
         }
-        $running = Get-Process | Where-Object { $_.MainWindowTitle -like '*moe - Godot Engine*' }
+        $running = Get-Process | Where-Object { $_.MainWindowTitle -like '*rad-godot - Godot Engine*' }
         if ($running) {
             throw "An editor already has this project open (pid $($running.Id -join ', ')): '$($running.MainWindowTitle -join '; ')'. Two editors on one project.godot overwrite each other. Use that one."
         }
