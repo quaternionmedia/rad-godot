@@ -437,3 +437,17 @@ remote, which still does not exist.
 D (the graph host through a store and resolver), E (adoption). Human: the
 remote and the push; the checklist; ratify or strike titanharvest's proposal;
 open golfvs's pull request after #1 merges.
+
+## Session 9: the remote exists
+
+Stamped 2026-09-19. Tools: written with an AI coding assistant, reviewed and
+committed by a human.
+
+`quaternionmedia/rad-godot` was created **private**, with nobody tagged, on
+the same terms as titanharvest that day, and `main` was pushed at `076e3bb`
+after `tools/dev.ps1 check` and `test` ran green at that commit here (twenty
+scripts, nine imports, the vector pin, twenty-five cases, fifty-eight
+conformance cases). Nothing else in Session 8's queue moved: the by-hand
+checklist, the titanharvest proposal and golfvs's pull request are still a
+person's. The consolidation session that did this is recorded in the org
+repository's `handbook/handoffs/six-branches-reached-origin.md`.
