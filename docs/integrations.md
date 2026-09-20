@@ -52,12 +52,12 @@ graph scene here becomes a host like any other. That is planned, not feared.
 | Input | Desktop first: right-click or a held key opens (tap-select), long-press on touch (release-select); keyboard by the nine cells — four tools sit at the cardinals, where `cellAgreesWithRing` is true. A gamepad is the nine-cells record's own trigger ("a surface with directions but no digits") and is not promised. |
 | **First needed at** | **M2 — The Field** ("break rock, dig, water, harvest with the tools"); the fork is decided at M3's gate. |
 | Needs from rad-godot | v0.0.2 at least (session, renderer, keyboard path); v0.0.3's store pattern is the shape §5.2's host wiring should copy. |
-| Host-side blockers | M1 (the dome) is next there, not M2. One open pull request (#2, `integrate/assetbase-demo`) holds the contributor's slot; a proposal waits for it. |
-| **Status** | `not started` |
-| Next step | When the slot frees: a pull request in titanharvest adding the `[PROPOSED]` bullet below to `DESIGN.md` §5.2 and one line to `DECISIONS.md`'s pending list, so the docs-coupling check passes. Nothing else until M2 opens. |
+| Host-side blockers | M1 (the dome) is next there, not M2. The contributor's slot is free: PR #2 merged as `a5d3216`. |
+| **Status** | `proposed in host` — on the local branch `docs/rad-tool-ring` (worktree `Documents/titanharvest.worktrees/rad-tool-ring`, commit `a98e291` off `a5d3216`), not pushed: the human asked for it local. Its docs-coupling check was seen red with the pending list one short, and green with it in step. |
+| Next step | Open the pull request from that branch when the human says so; ratify or strike in `DECISIONS.md`. Nothing else until M2 opens. |
 
-**Proposal text, ready to paste** (a `[PROPOSED]` bullet for §5.2; the pending
-list in `DECISIONS.md` gains "the tool ring is rad-godot"):
+**Proposal text, as committed on that branch** (a `[PROPOSED]` bullet in §5.2;
+the pending list in `DECISIONS.md` gained "the tool swap is a rad ring"):
 
 > - `[PROPOSED]` **The tool swap is a rad ring.** Whichever reading of the
 >   verbs fork is taken, the mech selects its tool from a radial menu that is
@@ -72,7 +72,7 @@ list in `DECISIONS.md` gains "the tool ring is rad-godot"):
 
 | | |
 |---|---|
-| Repository | `quaternionmedia/golfvs`, public; no local clone on this workstation |
+| Repository | `quaternionmedia/golfvs`, public; cloned 2026-09-19 to `Documents/golfvs` (the vault folder `Documents/pk/qmp/golfvs` is empty and is not a clone) |
 | Family | `games` |
 | Shared ground | Godot `4.7.2.stable` pinned (its ADR-008), gdUnit4 vendored, a docs-coupling check of the same shape |
 | **Where the menu does not fit**, and why | The stroke (one continuous gesture, ADR-007), the club selector (a wordless bar, ADR-018), and the whole first run (pillar 3: "no menus between the urge to play and the first swing"; ADR-014: zero words). Nothing here proposes a ring anywhere a new player is. |
@@ -80,26 +80,33 @@ list in `DECISIONS.md` gains "the tool ring is rad-godot"):
 | Vocabulary | `place:<sport>`, `focus:<trigger>`, `move`, `remove`; `fork:retry` / `fork:defend` / `fork:ghost` |
 | Input | One thumb: release-select is the primary style; the ring is fitted to a phone viewport by `fitRing` / `clampRingCentre`, which the vectors pin at small sizes. |
 | **First needed at** | **M5 — Local + Postal** ("Pass-and-play VS (placement UI, budget)", Defense Range re-planning); M4's fork ring is a possible earlier point. The project is at M0 with M1–M3 work ahead of it. |
-| Needs from rad-godot | v0.0.2 plus the touch checklist from the scope record's Q4 (a 2D or touch mode for the host here, so the checklist is run on a phone before a phone game copies the addon). **One question for rad upstream:** golfvs draws no words, and a wedge carries a label. rad-android already went icon-first with the full name in the hub on highlight and always in the accessibility tree; golfvs would want no hub text either. Whether an icon-only ring with labels only in the accessibility tree is conformant is a contract reading to settle with rad before M5, not a workaround to apply at M5. |
-| Host-side blockers | One open pull request (#1, `camera-orbit-and-selector-corner`, ADR-020 to ADR-030) holds the contributor's slot. Its head was read for this page: placement stays at M5 and the first run gains no menu, so the placement above stands. |
-| **Status** | `not started` |
-| Next step | When the slot frees: a pull request adding the `[PROPOSED]` bullet below to `DESIGN.md` §11.4 and a pending-list line to `DECISIONS.md`. Raise the icon-only question in rad's records before M5. |
+| Needs from rad-godot | v0.0.2 plus the touch checklist from the scope record's Q4 (a 2D or touch mode for the host here, so the checklist is run on a phone before a phone game copies the addon). **Symbols by default, words eventual** — the human's reading, 2026-09-19: golfvs shows icons on the wedges and the name in the accessibility tree at first, and shows words when the project decides to; every item carries its label from the start, so turning words on is a theme change. The question for rad upstream is therefore narrower than "is icon-only conformant": it is whether a renderer may *hide* a label it holds, which is a theme decision under rad's token record rather than a contract one. Raise it there before M5; rad-android's icon-first wedges with the name in the hub on highlight are the precedent. |
+| Host-side blockers | One open pull request (#1, `camera-orbit-and-selector-corner`, ADR-020 to ADR-030) holds the contributor's slot. Its head was read for this page: placement stays at M5, the first run gains no menu, and §11.4 is byte-identical to `main`'s, so the branch below rebases clean when #1 lands. |
+| **Status** | `proposed in host` — on the local branch `docs/rad-defence-ring` in `Documents/golfvs` (commit `48dedef` off `e904819`), not pushed: the human asked for it local and the slot is held by #1. Its docs-coupling check was seen red with the pending list one short, and green with it in step. |
+| Next step | When #1 merges: rebase, open the pull request; ratify or strike in `DECISIONS.md`. Raise the hidden-label question in rad's records before M5. |
 
-**Proposal text, ready to paste** (a `[PROPOSED]` bullet for §11.4; the
-pending list gains "DefensePlan authoring is a rad ring"):
+**Proposal text, as committed on that branch** (a `[PROPOSED]` bullet in §11.4;
+the pending list gained "DefensePlan authored through a rad ring"):
 
-> - `[PROPOSED]` **DefensePlan is authored through a rad ring.** Placement
->   and focus are set by long-press: on the ground, a ring of the sports the
->   budget allows; on a defender, its focus trigger, `move` and `remove`, with
->   `move` enabled on exactly one defender per lie (ADR-009). The ring is
+> - `[PROPOSED]` **The plan is authored through a rad ring.** Placement and
+>   focus are set by long-press: on the ground, a ring of the sports the
+>   budget still allows; on a defender, its focus trigger, `move` and
+>   `remove`, with `move` enabled on exactly one defender per lie (ADR-009)
+>   and greyed on the rest — a wedge the menu refuses to commit. The ring is
 >   `rad-godot`'s `addons/rad/`, copied at a version tag and locked by hash;
->   the resolver is this project's and the intents are applied by
->   `DefensePlan`, so a human's plan and an AI's are still one code path. It
->   draws no words: icons on the wedges, names only in the accessibility tree.
->   Nothing about the stroke, the club selector or the first run changes.
+>   the resolver is this project's, and the intents are applied by
+>   `DefensePlan`, so a human's plan and an AI's stay one code path. It draws
+>   **symbols by default** — an icon on each wedge, the name in the
+>   accessibility tree — and **words when this project decides to show them**:
+>   every item carries its label from the start, so turning words on is a
+>   theme change and not a redesign. Nothing about the stroke, the club
+>   selector (ADR-018) or the first run (ADR-014) changes; the ring first
+>   appears where a human defends a whole hole, at M5.
 
 ## Log
 
 | Date | Host | Event |
 |---|---|---|
 | 2026-09-19 | both | Ledger opened. Where each host would use the ring read from its design document at the host's current head (golfvs: the open pull request's head). Both contributor slots occupied by in-flight pull requests; nothing proposed in either host yet. |
+| 2026-09-19 | titanharvest | PR #2 merged (`a5d3216`); slot free. Local branch `docs/rad-tool-ring` (`a98e291`) carries the §5.2 proposal, the pending-list line and a handoff section; docs check seen red then green. Not pushed, by instruction. Status → `proposed in host`. |
+| 2026-09-19 | golfvs | Cloned to `Documents/golfvs`. Local branch `docs/rad-defence-ring` (`48dedef`) carries the §11.4 proposal with the human's reading — symbols by default, words eventual — the pending-list line and a handoff item; docs check seen red then green. PR #1 still holds the slot; §11.4 unchanged on its head. Status → `proposed in host`. |

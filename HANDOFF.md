@@ -310,3 +310,34 @@ C, D, E unchanged. Add: when either host's slot frees, open the proposal
 pull request the ledger holds for it and move its status to `proposed in
 host`; raise the icon-only question in rad's records before golfvs reaches
 M5.
+
+---
+
+## Session 6: the host branches exist
+
+Stamped 2026-09-19. Tools: written with an AI coding assistant, reviewed and
+committed by a human.
+
+The human asked for the host branches to be started locally. They are, and
+the ledger's two status lines moved to `proposed in host`:
+
+- titanharvest: `docs/rad-tool-ring` at `a98e291`, a worktree beside the
+  clone, off the `main` that PR #2 had just merged into. The slot there is
+  free; the branch is local by instruction.
+- golfvs: cloned to `Documents/golfvs`; `docs/rad-defence-ring` at `48dedef`
+  off `main`. PR #1 still holds that slot, and §11.4 is identical on its
+  head, so the rebase is clean when it lands.
+
+Each branch adds one `[PROPOSED]` bullet to the host's design document, one
+line to its pending list, and a handoff note, and each host's docs-coupling
+check was seen red with the list one short before it was seen green. The
+golfvs bullet carries the human's reading — symbols by default, words
+eventual, every item labelled from the start — which narrows the question for
+rad upstream from "is icon-only conformant" to "may a renderer hide a label
+it holds", a theme question rather than a contract one.
+
+### Queue
+
+C, D, E unchanged. Open the two host pull requests when the human says so
+(golfvs after #1 merges). Raise the hidden-label question in rad's records
+before golfvs reaches M5.
