@@ -217,3 +217,55 @@ In the tree at this session's commit:
 - `vectors.lock` pins a commit on a rad branch that has no upstream tracking
   and may be merged or rebased; the hash is what holds, the ref is where to
   look.
+
+---
+
+## Session 4: the core replays the vectors
+
+Stamped 2026-09-19. Tools: written with an AI coding assistant, reviewed and
+committed by a human.
+
+### In the tree
+
+- `addons/rad/core/` — geometry, cells, time, chord, machine — ported line for
+  line from rad `index.html` at the pinned commit, the block between the CORE
+  banner and the generated vectors block, plus `CHORD_MAP`, `DIVS` and
+  `TEMPO_RANGE` from further down because the vectors name them. Reference
+  names kept verbatim. The core never logs: where the reference throws,
+  `assertRing` returns the message and `createMachine` / `placeCells` return
+  null.
+- `addons/rad/conformance.gd` — the port of the reference's
+  `runConformanceWith`, pure, reusable by a host that wants to show
+  conformance in-scene the way the web reference does.
+- `tests/test_conformance.gd` replays the whole file and names every failing
+  case in one run; two tests beside it are the suite's own mutation (a wrong
+  expected index, a wrong expected commit) and must stay red-capable.
+  `tests/test_bootstrap.gd` refuses an engine that is not the pin.
+- gdUnit4 vendored as titanharvest vendors it; `tools/dev.ps1 test` runs it
+  headless after an import; `check` gains the core-boundary lint
+  (`tools/check_core_boundary.py`) and parses `addons/rad/` scripts too.
+
+### Verified, at this commit
+
+`tools/dev.ps1 check` and `tools/dev.ps1 test` both green; the conformance
+run prints the case count it replayed. Four mutations of the core, each seen
+red on the case its record names, each restored: `cancelScale` perturbed →
+the r_cancel boundary case; `PLACEMENT` reordered clockwise-from-top → the
+placement, reachability and agreement cases; the hub-latch guard removed from
+`move` → "latched hub press does not highlight while dragging out"; an
+`Input` call in `core/` → the boundary lint.
+
+Two things learned, both now in `dev.ps1` comments: a new `class_name` is
+invisible to `--check-only` and to the test runner until the project has been
+imported once, so both modes import first; and a headless runtime script error
+leaves the exit code 0, so the smoke step reads stderr.
+
+The v0.0.1 claim in the scope record is met by this tree. The tag is the
+human's to cut.
+
+### Queue
+
+C (session, renderer, input adapter), D (host through a store and resolver),
+E (remote, adoption) — unchanged from session 3. The directory is still
+`Documents/moe`; renaming it to `rad-godot` waits on the other agent session
+that holds the folder being closed.

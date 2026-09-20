@@ -45,9 +45,11 @@ carrying `i`, `id` and `label` as the contract's effect clause requires.
 **The one semantic the language cannot mirror.** The reference raises on a
 ring of zero or more than eight items. GDScript has no exceptions, so
 `assertRing` returns an error string (empty on success) and `createMachine`
-returns `null` after pushing that string as an engine error. The replayer
-reads a vector's `expectThrows` as "returned null". Nothing else in the port
-departs from the reference's control flow.
+returns `null`. The core never logs — it returns verdicts and the session
+above it reports — because an engine error raised inside the case that
+expects the refusal would read as a test error. The replayer reads a vector's
+`expectThrows` as "returned null". Nothing else in the port departs from the
+reference's control flow.
 
 ## 2. Conformance
 

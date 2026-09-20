@@ -3,9 +3,11 @@
   The local loop for rad-godot, on the pinned engine and nothing else.
 
 .DESCRIPTION
-  tools/dev.ps1 check          headless import, the engine's own parser on every
-                               script, then the main scene run headless for a few
-                               frames with stderr read for script errors
+  tools/dev.ps1 check          headless import, the vector pin, the core boundary,
+                               the engine's own parser on every script, then the main
+                               scene run headless for a few frames with stderr read
+                               for script errors
+  tools/dev.ps1 test           the gdUnit4 suites, headless -- the same invocation CI uses
   tools/dev.ps1 play           run the main scene, windowed; -Frames N quits after N frames
   tools/dev.ps1 editor         open the editor on this project
 
@@ -22,13 +24,14 @@
 
 .EXAMPLE
   tools/dev.ps1 check
+  tools/dev.ps1 test
   tools/dev.ps1 play -Frames 60
   $env:GODOT_BIN = 'D:\godot\Godot_v4.7.2-stable_win64.exe'; tools/dev.ps1 check
 #>
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet('check', 'play', 'editor')]
+    [ValidateSet('check', 'test', 'play', 'editor')]
     [string]$Mode = 'check',
 
     # play only: quit after this many frames. 0 runs until the window closes.
@@ -120,8 +123,15 @@ switch ($Mode) {
         python tools/check_vector_pin.py
         if ($LASTEXITCODE -ne 0) { throw "conformance/vectors.json is not the copy the lock pins" }
 
-        Write-Host '== check-only, every tracked script outside addons/' -ForegroundColor Cyan
-        $scripts = git ls-files '*.gd' | Where-Object { $_ -notlike 'addons/*' }
+        Write-Host '== core boundary' -ForegroundColor Cyan
+        python tools/check_core_boundary.py
+        if ($LASTEXITCODE -ne 0) { throw "addons/rad/core reaches outside the platform-free core" }
+
+        # The import above also rebuilt the class_name cache the parser needs:
+        # check-only on a script that names RadGeometry fails on a fresh clone
+        # until the project has been scanned once. Order is load-bearing.
+        Write-Host '== check-only, every tracked script outside third-party addons' -ForegroundColor Cyan
+        $scripts = git ls-files '*.gd' | Where-Object { $_ -notlike 'addons/*' -or $_ -like 'addons/rad/*' }
         if (-not $scripts) { throw 'git ls-files found no scripts; is this the repository root?' }
         $failed = @()
         foreach ($s in $scripts) {
@@ -140,6 +150,22 @@ switch ($Mode) {
             throw "the smoke run printed $($errors.Count) error line(s) to stderr"
         }
         Write-Host "OK: $SmokeFrames frames, nothing on stderr." -ForegroundColor Green
+    }
+    'test' {
+        # A new class_name is invisible to the runner until the project has
+        # been scanned; a suite that names it then fails to parse. Import first.
+        Write-Host '== import' -ForegroundColor Cyan
+        $rc = Invoke-Godot $godot @('--headless', '--path', '.', '--import')
+        if ($rc -ne 0) { throw "import exited $rc" }
+
+        Write-Host '== gdUnit4, headless' -ForegroundColor Cyan
+        # --remote-debug on port 0 is not a bind: it is a client that fails to
+        # connect, which stops Godot dropping into its interactive debugger on
+        # a parse error and hanging. CI does the same.
+        $rc = Invoke-Godot $godot @('--headless', '--path', '.', '-s', '-d', '--remote-debug', 'tcp://127.0.0.1:0',
+            'res://addons/gdUnit4/bin/GdUnitCmdTool.gd', '--add', 'res://tests', '--continue', '--ignoreHeadlessMode')
+        if ($rc -ne 0) { throw "gdUnit4 exited $rc; the report is under reports/" }
+        Write-Host 'OK: suite green.' -ForegroundColor Green
     }
     'play' {
         $arguments = @('--path', '.')

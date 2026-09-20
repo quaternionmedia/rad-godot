@@ -20,8 +20,9 @@ the first:
 
 ## Status
 
-`v0.0.0` — the plan is in the tree; the menu is not yet. What each tag claims,
-in order, is the ladder in
+The core is in the tree and replays every one of rad's vectors green; the
+session, renderer and host wiring are not yet. What each tag claims, in order,
+is the ladder in
 [docs/DRAFT-rad-godot-adoption-and-scope.md](docs/DRAFT-rad-godot-adoption-and-scope.md).
 The vectors are already pinned: [conformance/vectors.json](conformance/vectors.json)
 is a byte-exact copy of rad's, and [conformance/vectors.lock](conformance/vectors.lock)
@@ -43,7 +44,11 @@ built beside it:
 
 ## Project layout
 
-- `addons/rad/` — the menu; arrives with v0.0.1 and is not in the tree yet.
+- [`addons/rad/core/`](addons/rad/core) — the pure core: geometry, the nine
+  cells, time, chords, the state machine, with the reference's names kept
+  verbatim; [`addons/rad/conformance.gd`](addons/rad/conformance.gd) replays
+  the vectors against it.
+- [`tests/`](tests) — gdUnit4 suites: the engine pin, and every vector.
 - [`conformance/`](conformance) — rad's vectors and their lock.
 - [`docs/`](docs) — the scope and architecture records, drafted here and
   ratified by a human.
@@ -73,7 +78,8 @@ godot --path .
 nothing else:
 
 ```powershell
-tools/dev.ps1 check            # import, vector pin, the engine's parser on every script, a headless smoke run
+tools/dev.ps1 check            # import, vector pin, core boundary, the engine's parser on every script, a headless smoke run
+tools/dev.ps1 test             # the gdUnit4 suites, headless: engine pin and every vector
 tools/dev.ps1 play -Frames 60  # run the main scene windowed, quit after 60 frames
 tools/dev.ps1 editor           # open the editor, refusing if one already has the project
 ```
