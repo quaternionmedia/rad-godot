@@ -90,6 +90,7 @@ A milestone is claimed by a version tag and by nothing else.
 | v0.0.2 | The session and renderer: release-select and tap-select per contract, keyboard path, the nine cells, ring fitted to the viewport. The by-hand checklist (44-unit targets at eight items, dead-zone cancel, outward cancel, keyboard-only path) recorded in the handoff. |
 | v0.0.3 | The host routes the contract's node, edge, canvas and selection vocabulary through a graph store; the menu is the only way to reach those verbs; number-key typing is gone. |
 | v0.0.4 | Theme tokens from rad's token record; accessibility labels on every wedge through the engine's accessibility layer; the meters HUD in the reference's line grammar. |
+| v0.0.5 | A host outside this repository consumes `addons/rad/` at a tag, locked by hash, with its own resolver and its own test that every verb goes through its state — titanharvest's tool ring or golfvs's placement ring, whichever milestone arrives first (§9). The split in the revision triggers fires here. |
 | v0.1.0 | First release claim: checklist on a physical touch device, licence pass green, the two records ratified. |
 
 ## 5. Metrics
@@ -127,11 +128,34 @@ number-key typing; ratify this record and the architecture record.
 
 Answers land as Amendments here.
 
+## 9. The organisation's other Godot projects
+
+Two exist, both in the `games` family, both on the engine this repository
+pins, both with gdUnit4 and a docs-coupling gate of the same shape. Each has
+one place a ring belongs and several where it does not, read from its design
+document rather than assumed:
+
+- **titanharvest** — the tool swap in its verbs fork (`DESIGN.md` §5.2): a
+  ring of at most eight with at most one submenu under every reading of the
+  fork, first needed at its M2. The ring is the surface the fork is played
+  on, not a side taken in it.
+- **golfvs** — the defender's authoring surface (`DESIGN.md` §11.4,
+  `DefensePlan`): placement from a budget and per-defender focus, first
+  needed at its M5. Not the stroke, not the club selector, not the first run,
+  each of which that project has decided against menus for.
+
+`docs/integrations.md` is the ledger: how a host consumes the addon (copy at a
+tag, lock by hash, resolver and one signal, one test in the host), each host's
+status, what blocks it on both sides, and the proposal text each host's design
+document receives when its pull-request slot is free. A host's decision is
+made in that host's decision log and nowhere here.
+
 ## Revision triggers
 
 - Any §2 upstream amendment lands — re-derive the affected section.
-- A second Godot host consumes `addons/rad/` — split the addon to its own
-  repository.
+- A host outside this repository consumes `addons/rad/` — split the addon to
+  its own repository, and the graph scene here becomes one host among the
+  others in `docs/integrations.md`.
 - The vector file's schema gains a key the replayer does not dispatch on —
   extend the replayer in the same change as the pin bump.
 - A Godot minor release changes input, drawing or accessibility API the addon

@@ -51,7 +51,9 @@ built beside it:
 - [`tests/`](tests) — gdUnit4 suites: the engine pin, and every vector.
 - [`conformance/`](conformance) — rad's vectors and their lock.
 - [`docs/`](docs) — the scope and architecture records, drafted here and
-  ratified by a human.
+  ratified by a human, and [`docs/integrations.md`](docs/integrations.md),
+  the ledger of the addon's way into the organisation's other Godot projects
+  (titanharvest, golfvs).
 - [`Scenes/`](Scenes) — the host: `main.tscn`/`main.gd`, the orbiting camera,
   and the `Graph`/`NodeVisual`/`EdgeVisual` classes.
 - [`addons/godot-git-plugin/`](addons/godot-git-plugin) — third-party editor

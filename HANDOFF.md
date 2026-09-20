@@ -269,3 +269,44 @@ C (session, renderer, input adapter), D (host through a store and resolver),
 E (remote, adoption) — unchanged from session 3. The directory is still
 `Documents/moe`; renaming it to `rad-godot` waits on the other agent session
 that holds the folder being closed.
+
+---
+
+## Session 5: the other Godot projects are tracked
+
+Stamped 2026-09-19. Tools: written with an AI coding assistant, reviewed and
+committed by a human.
+
+The human asked that the effort to integrate the addon with the
+organisation's other Godot projects — titanharvest and golfvs — be added and
+tracked. It is:
+
+- `docs/integrations.md` is the ledger: how any host consumes the addon
+  (copy at a tag, lock by hash, its own resolver, one signal, one test in the
+  host), one section per host with where the ring fits and where it does not,
+  the milestone that first needs it, what blocks it on each side, its status,
+  and the `[PROPOSED]` text its design document receives. A dated log closes
+  it.
+- The scope record gains §9 naming both hosts, a v0.0.5 rung for the first
+  external host, and a split trigger worded for it.
+
+Read from the hosts before writing, at their current heads: titanharvest's
+ring is the tool swap in its verbs fork (`DESIGN.md` §5.2), first needed at
+its M2; golfvs's is the defender's authoring surface (`DESIGN.md` §11.4,
+`DefensePlan`), first needed at its M5, and expressly not the stroke, the club
+selector or the first run, which that project has decided against menus for
+(pillar 3, ADR-014, ADR-018 — checked on the head of its open pull request,
+which carries ADR-020 to ADR-030 and changes none of that).
+
+Nothing was put into either host. Both contributor slots are held by open
+pull requests (titanharvest #2, golfvs #1), so the proposals wait in the
+ledger, ready to paste, and the ledger says so. One question for rad upstream
+came out of golfvs and is recorded there: whether an icon-only ring, with
+labels only in the accessibility tree, is conformant.
+
+### Queue
+
+C, D, E unchanged. Add: when either host's slot frees, open the proposal
+pull request the ledger holds for it and move its status to `proposed in
+host`; raise the icon-only question in rad's records before golfvs reaches
+M5.
