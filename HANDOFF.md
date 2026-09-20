@@ -341,3 +341,40 @@ it holds", a theme question rather than a contract one.
 C, D, E unchanged. Open the two host pull requests when the human says so
 (golfvs after #1 merges). Raise the hidden-label question in rad's records
 before golfvs reaches M5.
+
+---
+
+## Session 7: pushed where a remote exists
+
+Stamped 2026-09-19. Tools: written with an AI coding assistant, reviewed and
+committed by a human.
+
+The human asked for titanharvest reconciled, the host branches pushed, and
+every local change tested, documented and pushed.
+
+- **This repository**: `tools/dev.ps1 check` and `test` green at the head of
+  the tree before anything else (the conformance run prints its count). The
+  local branch is renamed `master` → `main`, matching the organisation's other
+  repositories. **There is still no remote.** Creating
+  `quaternionmedia/rad-godot` was refused by the assistant's tool permissions
+  twice, in two forms; the human creates it, adds it as `origin`, and pushes
+  `main`. Nothing here depends on the remote's name beyond the ledger's text.
+- **titanharvest**: the other session had already brought local `main` to
+  `a5d3216` and removed its two worktrees, so reconciling was confirming that.
+  The branch's gates ran green in its worktree (docs check with base ref, the
+  loop's `check`, the suite); pushed; PR #3 opened assigned to the requester
+  with no reviewer; its three checks passed; merged by its author as
+  `1b86508`, as PR #2 was. Branch and worktree removed; `main` fast-forwarded
+  and clean.
+- **golfvs**: its three gates ran green locally on the branch (import, the
+  gdUnit4 suite, the headless round that replays every stroke to its own
+  hash); pushed as `origin/docs/rad-defence-ring`. No pull request: #1 holds
+  the slot, and CI there runs only on pull requests and `main`, so the local
+  run is the evidence until then.
+- The directory is still `Documents/moe`: the other agent session
+  (`codex.exe`) still holds it.
+
+### Queue
+
+C, D, E unchanged. Human: create the remote and push; ratify or strike the
+titanharvest proposal; open the golfvs pull request after #1 merges.
