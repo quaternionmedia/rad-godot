@@ -20,9 +20,10 @@ the first:
 
 ## Status
 
-The core is in the tree and replays every one of rad's vectors green; the
-session, renderer and host wiring are not yet. What each tag claims, in order,
-is the ladder in
+The core replays every one of rad's vectors green, and the session, renderer
+and invoker are in the tree with a demo scene to drive them; the graph host is
+not wired to the menu yet, and the by-hand checklist for the renderer has not
+been run. What each tag claims, in order, is the ladder in
 [docs/DRAFT-rad-godot-adoption-and-scope.md](docs/DRAFT-rad-godot-adoption-and-scope.md).
 The vectors are already pinned: [conformance/vectors.json](conformance/vectors.json)
 is a byte-exact copy of rad's, and [conformance/vectors.lock](conformance/vectors.lock)
@@ -48,7 +49,14 @@ built beside it:
   cells, time, chords, the state machine, with the reference's names kept
   verbatim; [`addons/rad/conformance.gd`](addons/rad/conformance.gd) replays
   the vectors against it.
-- [`tests/`](tests) — gdUnit4 suites: the engine pin, and every vector.
+- [`addons/rad/session.gd`](addons/rad/session.gd) — the seam a host
+  integrates against: a resolver in, intents out, the nine cells above the
+  machine. [`addons/rad/ui/`](addons/rad/ui) — the ring (`RadMenu`), the
+  invoker (`RadInvoker`) and the token layer (`RadTheme`).
+- [`Scenes/rad_demo.tscn`](Scenes/rad_demo.tscn) — the menu on its own, for
+  the by-hand checklist: `tools/dev.ps1 play -Scene res://Scenes/rad_demo.tscn`.
+- [`tests/`](tests) — gdUnit4 suites: the engine pin, every vector, the
+  session's routes, the control.
 - [`conformance/`](conformance) — rad's vectors and their lock.
 - [`docs/`](docs) — the scope and architecture records, drafted here and
   ratified by a human, and [`docs/integrations.md`](docs/integrations.md),
@@ -83,6 +91,7 @@ nothing else:
 tools/dev.ps1 check            # import, vector pin, core boundary, the engine's parser on every script, a headless smoke run
 tools/dev.ps1 test             # the gdUnit4 suites, headless: engine pin and every vector
 tools/dev.ps1 play -Frames 60  # run the main scene windowed, quit after 60 frames
+tools/dev.ps1 play -Scene res://Scenes/rad_demo.tscn -AutoOpen -Frames 90  # the ring on the real renderer, no hand needed
 tools/dev.ps1 editor           # open the editor, refusing if one already has the project
 ```
 

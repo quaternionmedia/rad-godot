@@ -8,7 +8,8 @@
                                scene run headless for a few frames with stderr read
                                for script errors
   tools/dev.ps1 test           the gdUnit4 suites, headless -- the same invocation CI uses
-  tools/dev.ps1 play           run the main scene, windowed; -Frames N quits after N frames
+  tools/dev.ps1 play           run the main scene, windowed; -Frames N quits after N frames;
+                               -Scene res://... runs another scene (the menu demo is res://Scenes/rad_demo.tscn)
   tools/dev.ps1 editor         open the editor on this project
 
   The binary is $env:GODOT_BIN if set, otherwise the first Godot found in the
@@ -36,6 +37,12 @@ param(
 
     # play only: quit after this many frames. 0 runs until the window closes.
     [int]$Frames = 0,
+
+    # play only: a scene to run instead of the project's main scene, as a res:// path.
+    [string]$Scene = '',
+
+    # play only: open the demo's ring on the first frame (the demo scene reads it after --).
+    [switch]$AutoOpen,
 
     # check only: how many frames the headless smoke run lasts.
     [int]$SmokeFrames = 30
@@ -170,9 +177,15 @@ switch ($Mode) {
     'play' {
         $arguments = @('--path', '.')
         if ($Frames -gt 0) { $arguments += @('--quit-after', "$Frames") }
+        if ($Scene) { $arguments += @($Scene) }
+        if ($AutoOpen) { $arguments += @('--', '--autoopen') }
         Write-Host "== play$(if ($Frames -gt 0) { " ($Frames frames)" })" -ForegroundColor Cyan
-        $rc = Invoke-Godot $godot $arguments
-        if ($rc -ne 0) { throw "the game exited $rc" }
+        # Captured, so a runtime script error (exit 0) is still read from stderr.
+        $run = Invoke-GodotCaptured $godot $arguments
+        if ($run.ExitCode -ne 0) { throw "the game exited $($run.ExitCode)" }
+        if ($run.Stdout) { $run.Stdout.TrimEnd() | Write-Host -ForegroundColor DarkGray }
+        $errors = @($run.Stderr -split "`r?`n" | Where-Object { $_ -match '^(SCRIPT ERROR|ERROR):' })
+        if ($errors) { $run.Stderr.TrimEnd() | Write-Host -ForegroundColor Red; throw "the run printed $($errors.Count) error line(s) to stderr" }
     }
     'editor' {
         $settings = Join-Path $env:APPDATA 'Godot\editor_settings-4.7.tres'

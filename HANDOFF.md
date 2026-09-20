@@ -378,3 +378,62 @@ every local change tested, documented and pushed.
 
 C, D, E unchanged. Human: create the remote and push; ratify or strike the
 titanharvest proposal; open the golfvs pull request after #1 merges.
+
+---
+
+## Session 8: the ring is on screen
+
+Stamped 2026-09-19. Tools: written with an AI coding assistant, reviewed and
+committed by a human.
+
+### In the tree
+
+- `addons/rad/session.gd` — `RadSession`, the port of the reference's
+  `createSession`: a resolver in, intents `{action, context, itemId, t}` out
+  through `committed`; `open_at` fits the ring to the viewport and clamps its
+  centre; `pointer` converts screen positions to the contract's polar frame;
+  above the machine, `press_cell`, `move_cell` (nearest item in the direction,
+  two directions inside 250 ms naming the corner) and `5` backing out, as
+  dossier's terminal port places them. `step()` is untouched.
+- `addons/rad/ui/rad_menu.gd` — `RadMenu`, the ring drawn as the reference
+  draws it, inert while closed and capturing the pointer while open; arrows
+  move to cells, digits choose, Tab rotates, Enter and Escape as the contract
+  says. `ui/rad_invoker.gd` — `RadInvoker`, right-click, `m`, or a long-press
+  with slop, emitting where and in which mode. `ui/rad_theme.gd` — the token
+  layer, rad's `radical` palette, every colour read through it.
+- `Scenes/rad_demo.tscn` — the menu on its own: a canvas ring of four with a
+  colour submenu of swatches, and an eight-item ring with a disabled and a
+  destructive item under `R`. `tools/dev.ps1 play -Scene … -AutoOpen`
+  opens the eight-item ring on the first frame for a frames-limited run.
+- Tests: `test_session.gd` (both commit styles through screen coordinates,
+  the three keyboard routes, the chord and its slow twin, the polar
+  convention) and `test_rad_menu.gd` (inert closed, capturing open, keys to
+  routes, Escape, a draw pass, the wedge polygon, the tokens).
+
+### Verified, at this commit
+
+`check` green on twenty scripts; `test` green across four suites (the run
+prints its counts). Four mutations seen red and restored: `5` no longer
+backing out; the polar angle's sign flipped; the direction route degraded to
+a raw grid walk (the defect the nine-cells record names — left from the top
+lands on nothing); the control never capturing input. The demo ran on Vulkan
+(Forward Mobile) for ninety frames with the eight-item ring open and a
+highlight, nothing on stderr.
+
+Two things learned: `signal` is a GDScript keyword, so a palette token by that
+name cannot be a property, which is why the palette is one Dictionary; and
+`Vector2` is single precision, so geometry asserted to a millionth fails for
+no reason — a thousandth is what it holds.
+
+### Not done, and whose it is
+
+The v0.0.2 claim needs the by-hand checklist on the demo scene: 44-unit
+targets at eight items, dead-zone cancel, outward cancel, the keyboard-only
+path. Nobody has had a hand on it yet. The tag waits on that, and on the
+remote, which still does not exist.
+
+### Queue
+
+D (the graph host through a store and resolver), E (adoption). Human: the
+remote and the push; the checklist; ratify or strike titanharvest's proposal;
+open golfvs's pull request after #1 merges.

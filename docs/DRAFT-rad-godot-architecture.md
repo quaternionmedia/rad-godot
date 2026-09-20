@@ -18,6 +18,7 @@ addons/rad/                     the portable menu; copy the directory, provide a
   core/chord.gd                 splitBursts, classifyBurst, prefixCollisions
   core/machine.gd               MAX_ITEMS, assertRing, createMachine, step
   session.gd                    RadSession — owns one machine state; pointer, key and cell entry points; signals
+  ui/rad_invoker.gd             Node — right-click, long-press with slop, or a key: emits where and in which mode
   ui/rad_menu.gd                Control — draws the ring, fits it to the viewport, routes input to the session
   ui/rad_theme.gd               Resource — rad's theme tokens as Colors
 Scenes/                         the host: graph store, resolver, visuals
@@ -107,27 +108,44 @@ inside `step()`; the session does it from outside so that no new event type
 enters the machine and the vectors keep describing it completely.
 
 `RadSession` signals: `highlighted(i, id, label)`, `committed(intent)`,
-`cancelled()`, `ring_changed()`. An intent is the contract's dictionary —
-`action`, `context`, `itemId`, `t` — and is the only value that leaves the
-addon.
+`cancelled()`, `ring_changed()`, and `effect(fx)` for a host that meters. An
+intent is the contract's dictionary — `action`, `context`, `itemId`, `t` — and
+is the only value that leaves the addon. `action` defaults to the item's `id`
+when a resolver gives none.
 
 ## 5. Input adapter
 
-One path, in `ui/rad_menu.gd`, on `_unhandled_input` while closed and
-`_gui_input` while open (the control captures the pointer once the ring is
-up, so the host stops seeing motion the menu owns):
+Two nodes, one path each, split where the reference splits it: the host owns
+invocation (it alone knows what is under the point), the menu owns everything
+after the ring is up.
 
-- Secondary button press, or the `m` key on a focused host element, → `open`
-  at the pointer (tap-select, idle).
-- Primary press or touch → `down` and a `SceneTreeTimer` of `GEOM.longPressMs`;
-  motion beyond `GEOM.slop` pixels before it fires cancels the pending press
-  (slop lives here and never in `step()`, as the contract states); the timer
-  firing → `longpress` (release-select, tracking).
+`ui/rad_invoker.gd` (`RadInvoker`, a Node the host adds) listens on
+`_unhandled_input` while nothing is open and emits `invoke(screen_pos, mode)`:
+
+- Secondary button press, or the `m` key → mode `idle` (tap-select) at the
+  pointer.
+- Primary press or touch arms a `SceneTreeTimer` of `GEOM.longPressMs`; motion
+  beyond `GEOM.slop` units before it fires disarms it (slop lives here and
+  never in `step()`, as the contract states); the timer firing with the same
+  press still down → mode `tracking` (release-select). A serial number ties
+  the timer to the press that armed it.
+
+`ui/rad_menu.gd` (`RadMenu`, a full-rect Control under a CanvasLayer) is
+invisible with `mouse_filter = IGNORE` while closed, and on `open_at` becomes
+visible, sets `mouse_filter = STOP` and takes focus, so the host stops seeing
+motion the menu owns. Its `_gui_input`:
+
 - Motion → `move` with `r` and `thetaDeg` computed from the ring centre, in
   the contract's convention: `thetaDeg = rad_to_deg(atan2(dy, dx))`, so up is
-  −90 and clockwise is positive in screen space.
-- Release → `up`. Arrows, Enter, Escape → `key`. Digits and numpad digits →
-  `press_cell`; with a modifier the arrows → `move_cell`.
+  −90 and clockwise is positive in screen space. Button and touch press →
+  `down`, release → `up`.
+- Enter and Escape → the machine's `key`. **Arrows → `move_cell`**, the
+  nine-cells record's direction route (nearest item in that direction, never a
+  walk along the row); **digits and keypad digits → `press_cell`**, with `5`
+  backing out; **Tab and Shift+Tab → the machine's `ArrowRight`/`ArrowLeft`**,
+  so the contract's rotate-and-commit path is also bound. At four items the
+  arrows and the rotation land in the same places; above four they do not,
+  and both are available on purpose.
 
 Density: one contract unit is one pixel times the window's
 `content_scale_factor`, so `r0`, `r1` and the 44-unit target hold on a scaled
